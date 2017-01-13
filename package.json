@@ -1,22 +1,18 @@
 {
-  "name": "node-sftp-deploy",
-  "version": "1.0.3",
+  "name": "node-sftp-deploy-i",
+  "version": "1.0.0",
   "description": "Upload and deploy files from SFTP within username & password",
   "main": "index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/weixin/node-sftp-deploy"
+    "url": "git+https://github.com/arsssen/node-sftp-deploy.git"
   },
-  "homepage": "https://github.com/weixin/node-sftp-deploy",
+  "homepage": "https://github.com/arsssen/node-sftp-deploy",
   "bugs": {
-    "url": "https://github.com/weixin/node-sftp-deploy/issues"
+    "url": "https://github.com/arsssen/node-sftp-deploy/issues"
   },
-  "author": {
-    "name": "Littledu",
-    "email": "410491325@qq.com",
-    "url": "https://github.com/littledu"
-  },
+  "author": "Arsen <759223@gmail.com> (https://github.com/arsssen)",
   "engines": {
     "node": ">=0.10.0"
   },
@@ -38,8 +34,15 @@
     "fs-extra": "^0.26.7",
     "object-assign": "~0.3.1",
     "parents": "~1.0.0",
+    "path": "^0.12.7",
     "q": "^1.4.1",
     "ssh2": "0.4.13"
   },
-  "readmeFilename": "README.md"
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
