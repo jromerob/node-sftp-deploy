@@ -12,6 +12,7 @@ var assign = require('object-assign');
 var fs = require('fs-extra');
 var chalk = require('chalk');
 var Q = require('q');
+var md5File = require('md5-file');
 
 var normalizePath = function (path) {
     return path.replace(/\\/g, '/');
@@ -29,7 +30,7 @@ module.exports = function (options, callback) {
             "sourcePath": "./",
             "remotePlatform": "unix",
             "includePattern": null,
-            "sort": null
+            "cacheFile": null
         }, options);
 
         if (options.host === undefined || options.host === '') {
@@ -50,6 +51,15 @@ module.exports = function (options, callback) {
 
         var finished = false;
         var connectionCache = null;
+        var cache = {}, cacheFilePath = null;
+        if (options.cacheFile) {
+            cacheFilePath = path.resolve(options.cacheFile);
+            try {
+                cache = require(cacheFilePath);
+            } catch (e) {
+                console.log("Cache file:", cacheFilePath, "invalid or doesn't exist, will create a new one");
+            }
+        }
 
         var items = [];
         fs.walk(sourcePath)
@@ -77,7 +87,7 @@ module.exports = function (options, callback) {
 
             connectSftp(function (sftp) {
                 async.eachSeries(files, function (file, done) {
-                    var filepath = file.path.replace(/\\/g, '/');
+                    var filepath = file.path.replace(/\\/, '/');
 
                     var pathArr = sourcePath.replace(/\/$/, '').split('/');
 
@@ -123,7 +133,12 @@ module.exports = function (options, callback) {
                             next();
                         });
                     }, function () {
-
+                        var fileHash = options.cacheFile && md5File.sync(filepath);
+                        if (fileHash && cache[finalRemotePath] === fileHash) {
+                            process.stdout.write("\n" + chalk.cyan("\u27A4 ") + chalk.gray(filepath) + chalk.white(" file was uploaded last time and haven't changed since then, skipping upload."));
+                            done();
+                            return;
+                        }
                         var readStream = fs.createReadStream(filepath);
 
                         var stream = sftp.createWriteStream(finalRemotePath, {
@@ -142,6 +157,7 @@ module.exports = function (options, callback) {
                             } else {
                                 process.stdout.write(" " + chalk.green('\u2714'));
                                 fileCount++;
+                                cache[finalRemotePath] = fileHash;
                             }
                             done();
                         });
@@ -151,6 +167,10 @@ module.exports = function (options, callback) {
                 }, function () {
                     console.log('\nsftp2:', chalk.green(fileCount, fileCount === 1 ? 'file' : 'files', 'uploaded successfully'));
                     finished = true;
+                    if (cacheFilePath) {
+                        fs.writeFileSync(cacheFilePath, JSON.stringify(cache));
+                        process.stdout.write("\ncache file " + cacheFilePath + "updated");
+                    }
                     if (sftp) {
                         sftp.end();
                     }

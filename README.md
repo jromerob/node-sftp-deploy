@@ -3,7 +3,11 @@
 > Upload and deploy files from SFTP with username & password.
 
 This is a copy of node-sftp-deploy package with some fixes and improvements.
-In addition to features provided by node-sftp-deploy it allows to specify a regexp pattern to filter files to be uploaded and a sorting function to upload files in particular order.
+In addition to features provided by node-sftp-deploy it allows to:
+
+* specify a regexp pattern to filter files to be uploaded
+* upload files in particular order (by specifying a sorting function for files)
+* use caching (uploaded files md5 hashes are stored **locally** and file upload is skipped if trying to upload same file).
 
 ## Install
 
@@ -30,7 +34,8 @@ sftp({
     "remotePath": "",
     "sourcePath": "./",
     "includePattern":  /.*\.(js|css|html)$/,  // optional, upload only js css and html files
-    "sort": sortingFunction                           // optional
+    "sort": sortingFunction,                          // optional
+    "cacheFile": "cache.json" //optional
 });
 
 //Support Promise
