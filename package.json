@@ -1,12 +1,12 @@
 {
-  "name": "node-sftp-deploy-sp",
+  "name": "@juancarlosrmr/node-sftp-deploy-sp",
   "version": "1.0.0",
   "description": "Clase que facilita el despliegue de archivos con SFTP mediante nombre de usuario y contraseña y el uso de eventos",
   "main": "index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jromerob/node-sftp-deploy-sp"
+    "url": "git+https://github.com/jromerob/node-sftp-deploy-sp.git"
   },
   "homepage": "https://github.com/jromerob/node-sftp-deploy-sp",
   "bugs": {
@@ -37,7 +37,8 @@
     "parents": "~1.0.0",
     "path": "^0.12.7",
     "q": "^1.4.1",
-    "ssh2": "0.4.13"
+    "ssh2": "0.4.13",
+    "user": "0.0.0"
   },
   "directories": {
     "test": "test"
