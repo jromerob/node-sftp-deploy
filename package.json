@@ -1,7 +1,7 @@
 {
   "name": "@juancarlosrmr/node-sftp-deploy-sp",
-  "version": "1.0.2",
-  "description": "Clase que facilita el despliegue de archivos con SFTP mediante nombre de usuario y contraseña y el uso de eventos",
+  "version": "1.0.3",
+  "description": "Clase que facilita el despliegue de archivos con SFTP mediante nombre de usuario y contraseña y el uso de eventos. Desarrollado para proyectos de Centro de observación y teledetección espacial.",
   "main": "index.js",
   "license": "MIT",
   "repository": {
