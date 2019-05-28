@@ -1,7 +1,7 @@
 {
   "name": "node-sftp-deploy-sp",
   "version": "1.0.0",
-  "description": "Despliegue de archivos con SFTP mediante nombre de usuario y contraseña",
+  "description": "Clase que facilita el despliegue de archivos con SFTP mediante nombre de usuario y contraseña y el uso de eventos",
   "main": "index.js",
   "license": "MIT",
   "repository": {

@@ -1,45 +1,72 @@
-## node-sftp-deploy improved
+## node-sftp-deploy mejorado y traducido al castellano
 
-> Upload and deploy files from SFTP with username & password.
+> Sube y despliega archivos a un servicio SFTPcon usuario y contraseña
 
-This is a copy of node-sftp-deploy package with some fixes and improvements.
-In addition to features provided by node-sftp-deploy it allows to:
+Este es una copia de node-sftp-deploy-i con algunos cambios
 
-* specify a regexp pattern to filter files to be uploaded
-* upload files in particular order (by specifying a sorting function for files)
-* use caching (uploaded files md5 hashes are stored **locally** and file upload is skipped if trying to upload same file).
+* Se implementa como clase 
+* Emite eventos para un mejor control del proceso
+* los mensajes por defecto se muestran en castellano
 
-## Install
-
+## Instalación
 
 ```bash
-npm install --save node-sftp-deploy-i
+npm install --save node-sftp-deploy-es
 ```
 
-## Usage
+## Uso
 
 ```javascript
-var sftp = require('node-sftp-deploy-i');
+Sftp = require('node-sftp-deploy-es');
+var sftp = new Sftp()
 
-// to upload html files after all others
-var sortingFunction = function (a, b) {
-    return path.extname(a.path).toLowerCase() === ".html" ? 1 : -1;
+var config = {
+    host: "xxxx.xxxxxxxxx.yy",
+    port: "22",
+    user: "user",
+    pass: "password",
+    remotePath: "/var/www/carpetaremota",
+    sourcePath: "./dist/desa",
+    silent: true
 };
 
-sftp({
-    "host": "10.10.10.10",
-    "port": "20",
-    "user": "user",
-    "pass": "pass",
-    "remotePath": "",
-    "sourcePath": "./",
-    "includePattern":  /.*\.(js|css|html)$/,  // optional, upload only js css and html files
-    "sort": sortingFunction,                          // optional
-    "cacheFile": "cache.json" //optional
-});
+sftp.on('connected', () => {
+    console.info('Recibido evento de conexión');
 
-//Support Promise
-sftp(sftpConfig).then(function(){
-    //Success Callback
-});
+})
+
+sftp.upload(config)
+    .then(data => ftpDeployOK(data))
+    .catch(err => ftpDeployKO(err));
+
+
+function ftpDeployOK(data) {
+    console.group();
+    console.log('--------------------');
+    console.log('✅ SUBIDA FINALIZADA'); 
+    console.log('--------------------');
+    console.groupEnd
+};
+
+function ftpDeployKO(err) {
+    console.group();
+    console.log('❌ ERROR !!!'); 
+    console.log('------------');
+    console.log(err); 
+    console.groupEnd
+
+}
 ```
+
+## Eventos
+
+| evento  |   |
+| ------------ | ------------ |
+|  connected |  Se emite al establecerse la conexión    |
+|  error |  Se emite al producirse un error    |
+|  con_error | Error en la conexiónr    |
+|  con_end |  Conexión finalizada    |
+|  con_close |  Conexión cerrada    |
+|  file_upload | proceso de archivo, recibe el objeto que identifica la subida:  {  file: filepath,                                remote: finalRemotePath } | 
+|  finish |  Se emite al finalizar el proceso , recibe el parámetro del numoer de archivos procesados    |
+
