@@ -176,14 +176,19 @@ function SftpDeployer() {
                                 mode: '0666',
                                 autoClose: true
                             });
-                            deployLog("\n" + chalk.cyan("\u27A4 ") + chalk.gray(filepath) + chalk.white(" -> ") + chalk.gray(finalRemotePath));
+                            var txt = "\n" + chalk.cyan("\u27A4 ") + chalk.gray(filepath) + chalk.white(" -> ") + chalk.gray(finalRemotePath);
+                            deployLog(txt);
+                            eventEmitter.emit('file_upload', {
+                                file: filepath,
+                                remote: finalRemotePath
+                            });
                             readStream.pipe(stream);
 
                             stream.on('close', function (err) {
 
                                 if (err) {
-                                    throw new Error('sftp2', err);
                                     eventEmitter.emit('error', err);
+                                    throw new Error('sftp2', err);
                                 } else {
                                     deployLog(" " + chalk.green('\u2714'));
                                     fileCount++;
@@ -196,6 +201,7 @@ function SftpDeployer() {
 
                     }, function () {
                         deployLog('\nsftp2:', chalk.green(fileCount, fileCount === 1 ? 'archivo' : 'archivos', 'subidos correctamente'));
+                        eventEmitter.emit('finish', fileCount);
                         finished = true;
                         if (cacheFilePath) {
                             fs.writeFileSync(cacheFilePath, JSON.stringify(cache));
@@ -241,17 +247,18 @@ function SftpDeployer() {
                 });
                 c.on('error', function (err) {
                     deployLog('sftp2', err);
-                    eventEmitter.emit('error,');
+                    eventEmitter.emit('con_error', err);
                     reject(err);
                 });
                 c.on('end', function () {
-                    // deployLog('Connection :: end');
+                    eventEmitter.emit('con_end');
                 });
                 c.on('close', function (hadError) {
                     if (!finished) {
                         deployLog('sftp2', "SFTP Cierre inesperado");
                     }
                     deployLog('Conexión :: cerrada', hadError ? "con error" : "");
+                    eventEmitter.emit('con_close');
 
                 });
 
