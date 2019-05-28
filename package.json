@@ -1,6 +1,6 @@
 {
   "name": "@juancarlosrmr/node-sftp-deploy-sp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Clase que facilita el despliegue de archivos con SFTP mediante nombre de usuario y contraseña y el uso de eventos",
   "main": "index.js",
   "license": "MIT",
@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/jromerob/node-sftp-deploy-sp/issues"
   },
-  "author": "https://github.com/jromerob/node-sftp-deploy-sp",
+  "author": "Juan Carlos Romero <jauncarlos.rmr@gmail.com>",
   "engines": {
     "node": ">=0.10.0"
   },
