@@ -51,13 +51,14 @@ module.exports = function (options, callback) {
 
         var finished = false;
         var connectionCache = null;
-        var cache = {}, cacheFilePath = null;
+        var cache = {},
+            cacheFilePath = null;
         if (options.cacheFile) {
             cacheFilePath = path.resolve(options.cacheFile);
             try {
                 cache = require(cacheFilePath);
             } catch (e) {
-                console.log("Cache file:", cacheFilePath, "invalid or doesn't exist, will create a new one");
+                console.log("Archivo caché:", cacheFilePath, "inválido o no existe, se creará uno nuevo");
             }
         }
 
@@ -74,7 +75,7 @@ module.exports = function (options, callback) {
                 fileLength = items.length;
 
                 if (fileLength <= 0) {
-                    console.log('sftp2:', chalk.yellow('No files uploaded'));
+                    console.log('sftp2:', chalk.yellow('no se han subido archivos'));
                 } else {
                     if (options.sort) {
                         items = items.sort(options.sort);
@@ -83,7 +84,7 @@ module.exports = function (options, callback) {
                 }
             });
 
-        function uploadFiles (files) {
+        function uploadFiles(files) {
 
             connectSftp(function (sftp) {
                 async.eachSeries(files, function (file, done) {
@@ -128,7 +129,9 @@ module.exports = function (options, callback) {
                         }
 
                         process.stdout.write("\nmkdir " + chalk.gray(d));
-                        sftp.mkdir(d, {mode: '0755'}, function () {
+                        sftp.mkdir(d, {
+                            mode: '0755'
+                        }, function () {
                             process.stdout.write(" " + chalk.green('\u2714'));
                             next();
                         });
@@ -165,11 +168,11 @@ module.exports = function (options, callback) {
                     });
 
                 }, function () {
-                    console.log('\nsftp2:', chalk.green(fileCount, fileCount === 1 ? 'file' : 'files', 'uploaded successfully'));
+                    console.log('\nsftp2:', chalk.green(fileCount, fileCount === 1 ? 'archivo' : 'archivos', 'subidos correctamente'));
                     finished = true;
                     if (cacheFilePath) {
                         fs.writeFileSync(cacheFilePath, JSON.stringify(cache));
-                        process.stdout.write("\ncache file " + cacheFilePath + "updated");
+                        process.stdout.write("\narchivo caché " + cacheFilePath + "actualizado");
                     }
                     if (sftp) {
                         sftp.end();
@@ -185,8 +188,8 @@ module.exports = function (options, callback) {
             });
         }
 
-        function connectSftp (callback) {
-            console.log('Authenticating with password.');
+        function connectSftp(callback) {
+            console.log('Autenticando con contraseña.');
 
             var c = new Connection();
             connectionCache = c;
@@ -196,13 +199,13 @@ module.exports = function (options, callback) {
                         throw err;
                     }
                     sftp.on('end', function () {
-                        console.log('SFTP session closed');
+                        console.log('Sesión SFTP cerrada');
                         sftp = null;
                         if (!finished) {
-                            console.log('error', new Error('sftp2', "SFTP abrupt closure"));
+                            console.log('error', new Error('sftp2', "Cierre de sesión SFTP inesperado"));
                         }
                     });
-                    console.log(chalk.green("Connected"));
+                    console.log(chalk.green("Conectado"));
                     callback(sftp);
                 });
 
@@ -216,9 +219,9 @@ module.exports = function (options, callback) {
             });
             c.on('close', function (hadError) {
                 if (!finished) {
-                    console.log('sftp2', "SFTP abrupt closure");
+                    console.log('sftp2', "SFTP Cierre inesperado");
                 }
-                console.log('Connection :: close', hadError ? "with error" : "");
+                console.log('Conexión :: cerrada', hadError ? "con error" : "");
 
             });
 

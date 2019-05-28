@@ -6,13 +6,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jromerob/node-sftp-deploy"
+    "url": "git+https://github.com/jromerob/node-sftp-deploy-sp"
   },
-  "homepage": "https://github.com/jromerob/node-sftp-deploy",
+  "homepage": "https://github.com/jromerob/node-sftp-deploy-sp",
   "bugs": {
-    "url": "https://github.com/jromerob/node-sftp-deploy/issues"
+    "url": "https://github.com/jromerob/node-sftp-deploy-sp/issues"
   },
-  "author": "https://github.com/jromerob/node-sftp-deploy",
+  "author": "https://github.com/jromerob/node-sftp-deploy-sp",
   "engines": {
     "node": ">=0.10.0"
   },
