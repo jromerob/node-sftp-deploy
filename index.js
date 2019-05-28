@@ -47,7 +47,7 @@ function SftpDeployer() {
 
             options = assign({
                 "host": "",
-                "port": "36000",
+                "port": "22",
                 "user": "",
                 "pass": "",
                 "remotePath": "",
